@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogador Pro Vision - Video BG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --panel-dark-bg-start: #1c1e26; 
+        --panel-dark-bg-end: #2a2d3a;   
+        --glass-bg: rgba(40, 42, 58, 0.65); 
+        --input-bg: rgba(25, 28, 40, 0.7);  
+        
+        --glass-border: rgba(255, 255, 255, 0.12); 
+        --text-panel-primary: #e8eaed; 
+        --text-panel-secondary: #a8abb2; 
+        --accent-color: #00aeff; 
+        --accent-color-hover: #33bfff; 
+        --danger-color: #ff6b81; 
+        --dark-color-stat: #9ea8c2; 
+        --input-border: rgba(80, 90, 120, 0.5);
+        --input-focus-border: var(--accent-color);
+        --shadow-color-light-panel: rgba(0, 174, 255, 0.35); 
+        --shadow-color-dark-panel: rgba(0, 0, 0, 0.4);
+        --body-fallback-bg: #12141a; 
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--body-fallback-bg); 
+        color: var(--text-panel-primary); 
+        display: flex;
+        flex-direction: column; 
+        align-items: center; 
+        padding-top: 40px; 
+        padding-bottom: 40px; 
+        padding-left: 20px;
+        padding-right: 20px;
+        min-height: 100vh; 
+        line-height: 1.6;
+        overflow-x: hidden; 
+        position: relative; 
+      }
+      
+      #background-video {
+        position: fixed; 
+        right: 0;
+        bottom: 0;
+        min-width: 100%; 
+        min-height: 100%;
+        width: auto; 
+        height: auto; 
+        z-index: -100; 
+        object-fit: cover; 
+        filter: brightness(0.6) blur(1px); 
+      }
+
+      h1 { 
+        text-align: center;
+        font-size: 2.4em;
+        color: #fff; 
+        margin-bottom: 35px; 
+        font-weight: 700;
+        text-shadow: 0 0 12px var(--accent-color), 0 0 25px rgba(0,174,255,0.6);
+        position: relative; 
+        z-index: 1;
+        text-transform: uppercase; 
+      }
+
+      .container { 
+        background: var(--glass-bg); 
+        border-radius: 18px; 
+        box-shadow: 0 10px 35px var(--shadow-color-dark-panel), 
+                    inset 0 1px 0 rgba(255,255,255,0.07),
+                    inset 0 0 60px rgba(0,0,0,0.25);
+        padding: 30px 35px;
+        max-width: 680px;
+        width: 100%;
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(15px); 
+        -webkit-backdrop-filter: blur(15px); 
+        animation: fadeInContainer 0.7s ease-out forwards;
+        color: var(--text-panel-primary); 
+        position: relative; 
+        z-index: 1;
+        margin-bottom: 20px; 
+      }
+       @keyframes fadeInContainer {
+        from { opacity: 0; transform: translateY(25px) scale(0.97); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      
+      .counter-top { 
+        width: 100%; padding: 15px 20px; font-size: 1.05em; font-weight: 500;
+        border: 1px solid var(--input-border); border-radius: 10px; 
+        text-align: center; background-color: var(--input-bg);  
+        color: var(--text-panel-secondary); 
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.25);
+        margin-bottom: 30px; 
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+      .counter-top.updated { animation: pulseCounter 0.5s ease-out; }
+      @keyframes pulseCounter {
+          0% { transform: scale(1); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); }
+          50% { transform: scale(1.02); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25), 0 0 10px var(--shadow-color-light-panel); }
+          100% { transform: scale(1); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); }
+      }
+
+      .input-section { width: 100%; text-align: left; }
+      .input-section-after-counter { margin-bottom: 30px; }
+      .input-section label {
+        font-size: 0.95em; color: var(--text-panel-secondary); 
+        margin-bottom: 10px; display: block; font-weight: 500;
+      }
+      input[type="text"]#number { 
+        width: 100%; padding: 15px 20px; font-size: 1.1em; font-family: 'Inter', sans-serif;
+        border: 1px solid var(--input-border); border-radius: 10px; text-align: left; 
+        background-color: var(--input-bg);  
+        color: var(--text-panel-primary); 
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.25);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      input[type="text"]#number:focus {
+        border-color: var(--input-focus-border);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.25), 0 0 12px var(--shadow-color-light-panel);
+        outline: none;
+      }
+
+      .buttons-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+      .btn {
+        padding: 12px 28px; font-size: 1em; font-weight: 600; border: none;
+        border-radius: 10px; cursor: pointer; color: #fff;
+        background: linear-gradient(145deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 80%, black));
+        box-shadow: 0 4px 0 color-mix(in srgb, var(--accent-color) 60%, black), 
+                    0 6px 15px rgba(0,0,0,0.3),
+                    inset 0 1px 1px rgba(255,255,255,0.2); 
+        text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+        transition: all 0.15s ease-out;
+      }
+      .btn:hover {
+        background: linear-gradient(145deg, var(--accent-color-hover), color-mix(in srgb, var(--accent-color-hover) 85%, black));
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--accent-color-hover) 55%, black),
+                    0 8px 20px rgba(0,0,0,0.35),
+                    inset 0 1px 1px rgba(255,255,255,0.25);
+        transform: translateY(-2px);
+      }
+      .btn:active {
+        background: linear-gradient(145deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 70%, black));
+        box-shadow: 0 2px 0 color-mix(in srgb, var(--accent-color) 50%, black),
+                    0 3px 10px rgba(0,0,0,0.2),
+                    inset 0 1px 1px rgba(0,0,0,0.1);
+        transform: translateY(1px);
+      }
+
+      .table-container {
+        overflow-x: auto; 
+        border-radius: 10px; 
+        border: 1px solid var(--glass-border);
+        background-color: rgba(15, 17, 25, 0.5); 
+        box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+      }
+      table { border-collapse: collapse; width: 100%; }
+      th, td {
+        border: 1px solid var(--glass-border); padding: 12px 10px; 
+        text-align: center; font-size: 0.9em;
+      }
+      th {
+        background-color: rgba(0, 174, 255, 0.15); color: var(--accent-color);
+        font-weight: 600; text-transform: uppercase; font-size: 0.8em; 
+        letter-spacing: 0.8px; border-bottom-width: 2px; 
+      }
+      
+      td.stat-red { color: var(--danger-color); font-weight: 500; }
+      td.stat-black { color: var(--dark-color-stat); font-weight: 500; }
+      td.total-count { font-weight: 600; color: var(--text-panel-primary); } 
+
+      tbody tr { 
+        transition: background-color 0.2s ease; 
+        will-change: background-color; 
+      }
+      tbody tr:hover { 
+        background-color: rgba(0, 174, 255, 0.1);
+      }
+            
+    @media (max-width: 700px) { 
+        body { padding: 15px; padding-top:25px; padding-bottom:25px; }
+        .container { padding: 25px 20px; margin-bottom:15px; }
+        h1 { font-size: 2em; margin-bottom: 25px;}
+        .counter-top { padding: 12px 15px; font-size: 1em; margin-bottom: 25px;}
+        input[type="text"]#number { padding: 12px 15px; font-size: 1em; }
+        th, td { padding: 10px 6px; font-size: 0.85em;}
+    }
+     @media (max-width: 480px) {
+        h1 { font-size: 1.7em; }
+        .container { padding: 20px 15px; border-radius: 15px; }
+        th, td { font-size: 0.8em; padding: 8px 5px;}
+        #background-video { display: none; } 
+        body { background: var(--dark-bg-start); } 
+    }
+
+    </style>
+  </head>
+  <body>
+    <video autoplay muted loop playsinline id="background-video">
+      <source src="https://cdn.pixabay.com/video/2016/09/21/5442-184226801_medium.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+
+    <h1>CATALOGADOR PRO VISION</h1> 
+
+    <div class="container"> 
+      <div id="counter" class="counter-top">Total de números inseridos: 0</div> 
+      <div class="input-section input-section-after-counter"> 
+        <label for="number">Insira os números dos giros (1-14), separados por vírgula:</label>
+        <input type="text" id="number" oninput="handleInputDebounced()" placeholder="Ex: 1, 14, 7 ..." />
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th> 
+              <th>🔴 Saída %</th> 
+              <th>⚫ Saída %</th> 
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTable"></tbody>
+        </table>
+      </div>
+    </div> 
+
+    <script>
+      const redNumbers = [1, 2, 3, 4, 5, 6, 7];
+      const blackNumbers = [8, 9, 10, 11, 12, 13, 14];
+      const MAX_TOTAL_ENTRIES = 720; // Alterado de maxEntries para MAX_TOTAL_ENTRIES
+      
+      // Array para armazenar todos os números inseridos válidos de forma persistente (FIFO com limite)
+      let allEnteredValues = []; 
+
+      const colorCounts = new Array(15)
+        .fill(null)
+        .map(() => ({ total: 0, red: 0, black: 0 }));
+
+      const counterElement = document.getElementById("counter");
+      const numberInputElement = document.getElementById("number"); // Cache do input
+
+      // Tenta carregar valores do localStorage na inicialização
+      function loadValuesFromStorage() {
+          try {
+              const storedValues = localStorage.getItem('catalogadorProVisionValues');
+              if (storedValues) {
+                  allEnteredValues = JSON.parse(storedValues);
+                  // Garante que não excede o limite ao carregar
+                  if (allEnteredValues.length > MAX_TOTAL_ENTRIES) {
+                      allEnteredValues = allEnteredValues.slice(allEnteredValues.length - MAX_TOTAL_ENTRIES);
+                  }
+                  numberInputElement.value = allEnteredValues.join(','); // Atualiza o campo visualmente
+                  processValues(allEnteredValues); // Processa os valores carregados
+              }
+          } catch (e) {
+              console.error("Erro ao carregar valores do localStorage:", e);
+              allEnteredValues = []; // Reseta em caso de erro
+          }
+      }
+
+      // Salva os valores no localStorage
+      function saveValuesToStorage() {
+          try {
+              localStorage.setItem('catalogadorProVisionValues', JSON.stringify(allEnteredValues));
+          } catch (e) {
+              console.error("Erro ao salvar valores no localStorage:", e);
+          }
+      }
+
+
+      function updateTable() {
+        const table = document.getElementById("resultsTable");
+        table.innerHTML = ""; 
+        for (let i = 1; i <= 14; i++) {
+          const stats = colorCounts[i]; 
+          const redPercentage = stats.total > 0 ? ((stats.red / stats.total) * 100).toFixed(1) : "0.0";
+          const blackPercentage = stats.total > 0 ? ((stats.black / stats.total) * 100).toFixed(1) : "0.0";
+          
+          const row = table.insertRow();
+          row.insertCell().textContent = i;
+          
+          const redCell = row.insertCell();
+          redCell.textContent = `${redPercentage}%`;
+          redCell.className = 'stat-red';
+          
+          const blackCell = row.insertCell();
+          blackCell.textContent = `${blackPercentage}%`;
+          blackCell.className = 'stat-black';
+
+          const totalCell = row.insertCell();
+          totalCell.textContent = stats.total;
+          totalCell.className = 'total-count';
+        }
+      }
+
+      // Função de debounce para handleInput
+      let debounceTimer;
+      function handleInputDebounced() {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+              handleInput();
+          }, 300); // Atraso de 300ms antes de processar
+      }
+
+      function handleInput() {
+        let rawInputValue = numberInputElement.value;
+
+        // Assume-se que o input pode ser uma lista completa ou apenas novos números adicionados.
+        // Para uma experiência de "fila", precisamos considerar os números já em allEnteredValues.
+        // No entanto, a forma como o usuário interage (cola uma lista inteira vs. adiciona um número) muda isso.
+        // Vamos assumir por ora que o input representa A TOTALIDADE da sequência desejada.
+        let currentInputValues = rawInputValue
+          .split(/[\s,]+/) 
+          .map((val) => val.trim())
+          .filter(val => val !== "") 
+          .map((val) => parseInt(val))
+          .filter((num) => !isNaN(num) && num >= 1 && num <= 14);
+        
+        // Atualiza o array global `allEnteredValues` com a entrada atual, respeitando o limite.
+        allEnteredValues = currentInputValues; // O input do usuário sobrescreve o que estava antes.
+
+        if (allEnteredValues.length > MAX_TOTAL_ENTRIES) {
+          allEnteredValues = allEnteredValues.slice(allEnteredValues.length - MAX_TOTAL_ENTRIES);
+          // Atualiza o campo de input para mostrar apenas os valores que estão sendo processados.
+          // Faz isso após o processamento para evitar que o cursor pule enquanto o usuário digita.
+          // numberInputElement.value = allEnteredValues.join(','); 
+        }
+        
+        processValues(allEnteredValues); // Processa os valores que estão no array global
+        saveValuesToStorage(); // Salva no localStorage após cada processamento
+      }
+
+      // Separa a lógica de processamento dos valores
+      function processValues(valuesToProcess) {
+        resetCounts();
+        
+        for (let i = 0; i < valuesToProcess.length - 1; i++) { 
+            const currentNumber = valuesToProcess[i]; 
+            const nextNumber = valuesToProcess[i + 1];  
+
+            if (redNumbers.includes(nextNumber)) {
+                colorCounts[currentNumber].red += 1;
+            } else if (blackNumbers.includes(nextNumber)) {
+                colorCounts[currentNumber].black += 1;
+            }
+            colorCounts[currentNumber].total += 1; 
+        }
+        
+        updateCounter(valuesToProcess.length); 
+        updateTable();
+
+        // Atualiza o campo input somente APÓS o processamento se houve truncamento
+        // Isso é para o caso onde `handleInput` truncou `allEnteredValues`
+        if (numberInputElement.value !== allEnteredValues.join(',')) {
+            // Pequeno timeout para permitir que o usuário termine de digitar/colar
+            // antes de o campo ser "corrigido" visualmente.
+            // Ou, se a intenção é que o campo SEMPRE reflita `allEnteredValues`, pode ser direto.
+            // Considerando a edição pelo usuário, talvez seja melhor deixar que ele gerencie o input
+            // e `allEnteredValues` seja a "verdade" interna.
+            // Se o usuário colar > 720, `allEnteredValues` terá os últimos 720.
+            // Se o usuário editar o campo depois, ele verá o que digitou, mas internamente processaremos os últimos 720.
+            // Para a experiência de "FIFO visual", o input PRECISA ser atualizado.
+            setTimeout(() => {
+                if (document.activeElement !== numberInputElement) { // Só atualiza se o usuário não estiver digitando ativamente
+                    numberInputElement.value = allEnteredValues.join(',');
+                }
+            }, 500); // Atraso para atualizar visualmente o input
+        }
+      }
+
+
+      function updateCounter(count) {
+        counterElement.innerText = `Total de números inseridos: ${count}`;
+        counterElement.classList.add('updated');
+        setTimeout(() => {
+            counterElement.classList.remove('updated');
+        }, 500); 
+      }
+
+      function resetCounts() {
+        for (let i = 1; i <= 14; i++) {
+          colorCounts[i] = { total: 0, red: 0, black: 0 };
+        }
+      }
+      
+      // Inicialização
+      loadValuesFromStorage(); // Carrega e processa valores do storage
+      if(allEnteredValues.length === 0) { // Se nada foi carregado, atualiza a tabela vazia e o contador
+          updateTable();
+          updateCounter(0); 
+      }
+      // Garante que o campo de input tenha o listener de debounce correto
+      numberInputElement.removeEventListener('input', handleInput); // Remove listener antigo se houver
+      numberInputElement.addEventListener('input', handleInputDebounced);
+
+    </script>
+  </body>
+</html>
